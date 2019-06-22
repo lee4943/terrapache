@@ -5,7 +5,7 @@ data "aws_instances" "webserver_instances" {
     Type = "webserver"
   }
 
-  depends_on = [ "aws_autoscaling_group.webserver_asg" ]
+  depends_on = ["aws_autoscaling_group.webserver_asg"]
 }
 
 // Latest Ubuntu Bionic AMI for our region
@@ -42,7 +42,7 @@ resource "aws_key_pair" "webservers_key_pair" {
 
 // Launch config
 resource "aws_launch_configuration" "webserver_lc" {
-  name                        = "webserver_lc"
+  name_prefix                 = "webserver_lc_"
   image_id                    = "${data.aws_ami.latest_ubuntu.id}"
   instance_type               = "t2.micro"
   key_name                    = "${aws_key_pair.webservers_key_pair.key_name}"
@@ -58,7 +58,7 @@ resource "aws_launch_configuration" "webserver_lc" {
 // Autoscaling group
 resource "aws_autoscaling_group" "webserver_asg" {
   name                 = "webserver_asg"
-  max_size             = 3
+  max_size             = 2
   min_size             = 2
   launch_configuration = "${aws_launch_configuration.webserver_lc.name}"
   vpc_zone_identifier  = ["${aws_subnet.public_1a.id}", "${aws_subnet.public_1b.id}"]
@@ -83,5 +83,5 @@ resource "aws_autoscaling_group" "webserver_asg" {
 
 // Output
 output "webserver_public_ips" {
-    value = "${join(", ", data.aws_instances.webserver_instances.public_ips)}"
+  value = "${join(", ", data.aws_instances.webserver_instances.public_ips)}"
 }

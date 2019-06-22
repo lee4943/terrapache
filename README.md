@@ -1,10 +1,11 @@
 # terrapache
 
+Terraform and Apache.  What's not to love?
+
 # Tested Using
 - Windows 8.1 (I know; I'm sorry)
 - Git Bash 2.14.2.3
 - Terraform 0.11.13
-
 
 # Deployment
 - Download `terraform` for your platform & ensure that `terraform` is in your path
@@ -17,4 +18,4 @@
     lb_url = http://<aws_alb_hostname>
     webserver_public_ips = <public_ip_address_1>, <public_ip_address_2>, ...
     ```
-- SSH to your webservers using the terraform-generated private key in `id_rsa`
+- SSH to your webservers using the `ubuntu` user and the terraform-generated private key in `id_rsa`

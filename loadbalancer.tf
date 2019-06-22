@@ -101,7 +101,7 @@ resource "aws_security_group" "lb_sg" {
 
 resource "aws_security_group" "webserver_sg" {
   name        = "webserver_sg"
-  description = "Allow restricted inbound SSH, outbound HTTP/HTTPS"
+  description = "Webserver security group"
   vpc_id      = "${aws_vpc.main.id}"
 
   ingress {
@@ -146,7 +146,7 @@ resource "aws_lb" "lb" {
   subnets            = ["${aws_subnet.public_1a.id}", "${aws_subnet.public_1b.id}"]
 
   tags = {
-    Name = "PlayQ-2019-alb"
+    Name = "PlayQ-2019-lb"
   }
 }
 
@@ -157,9 +157,10 @@ resource "aws_lb_listener" "lb_listener" {
 
   default_action {
     type = "fixed-response"
+
     fixed_response {
-        content_type = "text/html"
-        status_code = 500
+      content_type = "text/plain"
+      status_code  = 500
     }
   }
 }
@@ -200,4 +201,3 @@ resource "aws_autoscaling_attachment" "webserver_asg_attachment" {
 output "lb_url" {
   value = "http://${aws_lb.lb.dns_name}"
 }
-
